@@ -1,0 +1,3 @@
+{% macro device(id, name, small=false) -%}
+<div class="device-identity{{ ' small' if small else '' }}"><span class="device-name">{{ name }}</span></div>
+{%- endmacro %}

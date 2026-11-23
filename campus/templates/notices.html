@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block title %}交流留言{% endblock %}{% block content %}
+<div class="page-heading"><h1>交流留言</h1></div>
+<form method="post" class="message-form"><input type="hidden" name="csrf" value="{{ csrf }}"><label class="field">留言内容<textarea name="body" rows="3" maxlength="2000" placeholder="填写设备使用反馈或问题" required></textarea></label><button class="primary">发布留言</button></form>
+<section class="data-section"><div class="section-heading"><h2>留言记录</h2><span class="section-meta">共 {{ rows|length }} 条</span></div><div class="message-list">{% for r in rows %}<article class="message-row"><div class="message-meta"><b>{{ r.display_name }}</b><time>{{ r.created_at|local_time }}</time></div><div class="message-body">{{ r.body }}</div></article>{% else %}<p class="empty-cell">暂无留言。</p>{% endfor %}</div></section>
+{% endblock %}

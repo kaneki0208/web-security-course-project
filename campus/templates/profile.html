@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block title %}个人资料{% endblock %}{% block content %}
+<div class="page-heading"><h1>个人资料</h1></div>
+{% if request.args.get('saved') == '1' %}<div class="success" role="status">联系邮箱已保存。</div>{% endif %}
+<section class="profile-section"><div class="section-heading"><h2>基本信息</h2></div><dl class="profile-data"><dt>账号</dt><dd>{{ user.username }}</dd><dt>姓名</dt><dd>{{ user.display_name }}</dd><dt>身份</dt><dd>{{ '管理员' if user.role == 'admin' else '学生' }}</dd></dl><form action="/profile/email" method="post" class="profile-form"><input type="hidden" name="csrf" value="{{ csrf }}"><label class="field">联系邮箱<input name="email" type="email" value="{{ user.email }}" required aria-describedby="email-help"></label><p class="field-help" id="email-help">用于设备借用相关联系。</p><button class="primary">保存资料</button></form></section>
+{% endblock %}

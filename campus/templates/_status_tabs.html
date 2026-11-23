@@ -1,0 +1,4 @@
+<nav class="status-tabs" aria-label="申请状态">
+<a href="{{ url_for(request.endpoint, q=q) }}" class="{{ 'selected' if not selected_status else '' }}"{% if not selected_status %} aria-current="page"{% endif %}>全部 <span>{{ total }}</span></a>
+{% for s in statuses %}<a href="{{ url_for(request.endpoint, status=s, q=q) }}" class="{{ 'selected' if selected_status == s else '' }}"{% if selected_status == s %} aria-current="page"{% endif %}>{{ s }} <span>{{ counts.get(s,0) }}</span></a>{% endfor %}
+</nav>

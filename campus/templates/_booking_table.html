@@ -1,0 +1,5 @@
+{% from '_device.html' import device %}
+<div class="table-scroll" role="region" aria-label="借用申请记录" tabindex="0"><table class="booking-table"><thead><tr><th>申请编号</th>{% if show_owner %}<th>申请人</th>{% endif %}<th>设备名称</th><th>借用用途</th><th>申请时间</th><th>状态</th><th class="action-column">操作</th></tr></thead><tbody>
+{% for r in rows %}<tr><td class="record-id">#{{ r.id }}</td>{% if show_owner %}<td>{{ r.display_name }}</td>{% endif %}<td class="name-cell">{{ device(r.equipment_id,r.name,true) }}</td><td class="purpose-cell">{{ r.purpose }}</td><td class="date-cell">{{ r.created_at|local_time }}</td><td><span class="status {{ 'pending' if r.status == '待审批' else 'approved' if r.status == '已批准' else 'closed' }}">{{ r.status }}</span></td><td class="action-column"><button class="text-button detail" type="button" data-id="{{ r.id }}">查看</button></td></tr>
+{% else %}<tr><td colspan="{{ 7 if show_owner else 6 }}" class="empty-cell">{{ '没有符合筛选条件的申请。' if q or selected_status else '暂无借用申请。' }} <a href="/bookings?new=1">申请借用</a></td></tr>{% endfor %}
+</tbody></table></div>

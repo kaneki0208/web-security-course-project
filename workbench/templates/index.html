@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>安全实验工作台</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='workspace.css') }}">
+  <script defer src="{{ url_for('static', filename='workspace.js') }}"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="top-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>安全实验工作台</div>
+      <nav aria-label="工作台导航">
+        <a href="#pages" data-view="pages">页面清单</a>
+        <a href="#reports" data-view="reports">扫描报告</a>
+      </nav>
+      <button class="primary" id="open-import" type="button">导入文件</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="intro">
+      <div>
+        <h1 id="view-title">页面清单</h1>
+        <p id="view-description">查看归档页面的访问状态、表单参数和链接关系。</p>
+      </div>
+      <div class="workspace-actions">
+        <button id="load-example" class="quiet" type="button">加载示例</button>
+        <button id="load-audit" class="quiet" type="button">载入源码审查</button>
+        <button id="export-data" class="quiet" type="button" hidden>导出记录</button>
+        <button id="clear-data" class="quiet" type="button">清空视图</button>
+      </div>
+    </div>
+
+    <div class="source" id="source-line" aria-live="polite"></div>
+    <p class="notice" id="notice" role="status" hidden></p>
+
+    <div class="metrics" aria-label="记录统计">
+      <div><span>已记录页面</span><strong id="page-count">0</strong></div>
+      <div><span>页间链接</span><strong id="link-count">0</strong></div>
+      <div><span>检测记录</span><strong id="finding-count">0</strong></div>
+      <div><span>待复核</span><strong id="review-count">0</strong></div>
+    </div>
+
+    <section id="pages-view" class="page-layout" aria-label="页面清单">
+      <section class="panel" aria-labelledby="inventory-heading">
+        <div class="panel-header">
+          <h2 id="inventory-heading">访问记录</h2>
+          <label class="visually-hidden" for="page-search">搜索页面</label>
+          <input id="page-search" type="search" placeholder="搜索 URL、标题或参数">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">页面 / URL</th><th scope="col">HTTP 状态</th><th scope="col">参数</th></tr></thead>
+            <tbody id="page-rows"></tbody>
+          </table>
+        </div>
+        <p class="panel-footer" id="page-summary" aria-live="polite"></p>
+      </section>
+      <aside class="panel details-panel" id="page-details" aria-label="页面详情"></aside>
+    </section>
+
+    <div id="reports-view" class="reports-layout" hidden>
+      <section class="panel" aria-labelledby="report-heading">
+        <div class="panel-header report-header">
+          <h2 id="report-heading">检测记录</h2>
+          <div class="filters">
+            <label>目标<select id="target-filter"></select></label>
+            <label>工具<select id="tool-filter"></select></label>
+            <label>漏洞类型<select id="type-filter"></select></label>
+            <label>复核状态<select id="review-filter"></select></label>
+            <label>搜索<input id="finding-search" type="search" placeholder="URL、参数或记录名称"></label>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">发现 / URL</th><th scope="col">工具</th><th scope="col">漏洞类型</th><th scope="col">风险</th><th scope="col">复核状态</th></tr></thead>
+            <tbody id="finding-rows"></tbody>
+          </table>
+        </div>
+        <p id="finding-summary" class="panel-footer" aria-live="polite"></p>
+      </section>
+      <section class="panel" aria-labelledby="coverage-heading">
+        <div class="panel-header"><h2 id="coverage-heading">工具覆盖对照</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">工具</th>{% for target in targets %}<th scope="col">{{ target }}</th>{% endfor %}</tr></thead>
+            <tbody id="coverage-rows">
+              {% for tool in scan_tools %}<tr><th scope="row">{{ tool }}</th>{% for target in targets %}<td data-tool="{{ tool }}" data-target="{{ target }}">待补证据</td>{% endfor %}</tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="panel-footer">核对覆盖范围后，可结合独立基线判断漏报。</p>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="import-dialog" aria-labelledby="import-heading">
+    <form id="import-form" enctype="multipart/form-data" method="post" action="{{ url_for('import_file') }}">
+      <h2 id="import-heading">导入文件</h2>
+      <label>记录文件<input type="file" id="document" name="document" accept=".har,.json" required></label>
+      <p class="hint">支持 HAR、ZAP Traditional JSON 和课程 JSON，最大 24 MB。</p>
+      <label>HAR 页面范围<input id="scope" name="scope" type="url" placeholder="http://127.0.0.1:8080/dvwa/"></label>
+      <p class="hint">导入 HAR 时必填。范围由协议、主机、端口和路径前缀确定。</p>
+      <label>报告目标（选填）<select name="target"><option value="">未指定</option>{% for target in targets %}<option>{{ target }}</option>{% endfor %}</select></label>
+      <p id="import-error" class="notice error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" id="close-import">取消</button><button class="primary" type="submit" id="submit-import">导入</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{
+  "schema": "course-evidence/v1",
+  "findings": [
+    {
+      "target": "校园设备借用管理系统",
+      "tool": "静态代码审查",
+      "title": "设备搜索的查询拼接",
+      "type": "SQL 注入",
+      "url": "http://127.0.0.1:5000/equipment?q",
+      "method": "GET",
+      "parameter": "q",
+      "review": "已确认",
+      "reference": "源码包 app.py 第 180–198 行",
+      "evidence": "接口要求登录。第 183 行读取 q，第 192 行在 vulnerable 模式将 q 拼入 SQLite 查询，第 194 行保留 SQLite 错误文本供页面展示。fixed 模式在第 189 行使用参数绑定。category 在查询后由 Python 筛选。结论来自源码审查。"
+    },
+    {
+      "target": "校园设备借用管理系统",
+      "tool": "静态代码审查",
+      "title": "留言正文的模板转义",
+      "type": "跨站脚本",
+      "url": "http://127.0.0.1:5000/notices",
+      "method": "POST",
+      "parameter": "body",
+      "review": "已确认",
+      "reference": "源码包 app.py 第 200–210 行与 templates/notices.html 第 4 行",
+      "evidence": "留言正文写入 SQLite 后回到列表页面。vulnerable 模式的模板将正文标记为 safe，fixed 模式保留 Jinja 自动转义。结论来自源码审查。"
+    },
+    {
+      "target": "校园设备借用管理系统",
+      "tool": "静态代码审查",
+      "title": "借用单详情的对象权限检查",
+      "type": "访问控制",
+      "url": "http://127.0.0.1:5000/api/bookings/%7Bbooking_id%7D",
+      "method": "GET",
+      "parameter": "booking_id",
+      "review": "已确认",
+      "reference": "源码包 app.py 第 232–241 行",
+      "evidence": "接口会检查登录状态。借用单所属用户和管理员角色的检查仅在 fixed 模式生效。结论来自源码审查。"
+    },
+    {
+      "target": "校园设备借用管理系统",
+      "tool": "静态代码审查",
+      "title": "附件上传与同源提供",
+      "type": "不安全文件上传",
+      "url": "http://127.0.0.1:5000/attachments",
+      "method": "POST",
+      "parameter": "file",
+      "review": "已确认",
+      "reference": "源码包 app.py 第 243–281 行",
+      "evidence": "vulnerable 模式接受 HTML 文件并以同源文件提供给有权限的用户。fixed 模式仅接受 UTF-8 纯文本 .txt 并以附件形式发送。结论来自源码审查。"
+    },
+    {
+      "target": "校园设备借用管理系统",
+      "tool": "静态代码审查",
+      "title": "资料邮箱修改的请求校验",
+      "type": "跨站请求伪造",
+      "url": "http://127.0.0.1:5000/profile/email",
+      "method": "GET / POST",
+      "parameter": "email",
+      "review": "已确认",
+      "reference": "源码包 app.py 第 90–99 行与第 288–299 行",
+      "evidence": "vulnerable 模式允许 GET 修改邮箱，并对这个接口的 POST 免除 CSRF 校验。fixed 模式限制变更方法并校验 CSRF 令牌。结论来自源码审查。"
+    }
+  ]
+}

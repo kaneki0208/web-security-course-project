@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block title %}登录{% endblock %}{% block content %}
+<section class="login-panel"><h1>账号登录</h1><form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}<label class="field">账号<input name="username" autocomplete="username" required autofocus></label><label class="field">密码<input name="password" type="password" autocomplete="current-password" required></label><button class="primary login-submit">登录</button></form></section>
+{% endblock %}

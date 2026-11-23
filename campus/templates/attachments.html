@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block title %}申请附件{% endblock %}{% block content %}
+<div class="page-heading"><h1>申请附件</h1></div>
+<form class="upload-bar" method="post" enctype="multipart/form-data"><input type="hidden" name="csrf" value="{{ csrf }}"><label class="field" for="upload-file">选择附件<input id="upload-file" type="file" name="file" required aria-describedby="upload-help"></label><button class="primary">上传附件</button><p class="field-help" id="upload-help">单个文件不超过 1 MB。仅支持 UTF-8 编码的 .txt 文件。</p></form>
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+<section class="data-section"><div class="section-heading"><h2>已上传附件</h2><span class="section-meta">共 {{ rows|length }} 个</span></div><div class="table-scroll" role="region" aria-label="已上传附件" tabindex="0"><table><thead><tr><th>附件编号</th><th>文件名</th><th class="action-column">操作</th></tr></thead><tbody>{% for r in rows %}<tr><td class="record-id">#{{ r.id }}</td><td>{{ r.original_name }}</td><td class="action-column"><a href="/uploads/{{ r.stored_name }}">下载</a></td></tr>{% else %}<tr><td colspan="3" class="empty-cell">尚未上传附件。如需补充用途说明，请在上方选择文件后上传。</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}
