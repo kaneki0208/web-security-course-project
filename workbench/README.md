@@ -32,7 +32,19 @@ python -B -m unittest -v
 node --check static/workspace.js
 ```
 
-## 页面记录
+## 在线采集本机 DVWA
+
+先确认 [本机 DVWA 登录页](http://127.0.0.1:8085/login.php) 能打开。在仓库根目录运行以下命令。
+
+```powershell
+python .\workbench\crawl_dvwa.py
+```
+
+终端会用你输入的账号创建一次独立的 DVWA 会话，输入密码时屏幕不会显示字符。报告只保存页面元数据。采集范围固定为本机 `127.0.0.1:8085`，记录登录、首页、普通 SQL Injection 和 Blind 页面，并沿导航查找说明和关于页面。报告保留页面中出现的同站链接，未采集的链接在工作台显示为“未记录此页面的响应”。
+
+采集完成后，在工作台点击 **导入文件**，选择 `workbench/evidence/dvwa-live-pages.json`。进入 **页面清单**，打开两个 SQL 页面，核对 **HTTP 200**、字段 `id` 以及入链和出链。采集生成的 JSON 由 Git 忽略，保存在本机作为实验记录。
+
+## 归档页面记录
 
 1. 在浏览器自己的会话中登录本地 DVWA。打开开发者工具的 Network 面板，按课程要求手动浏览需要记录的页面。导出 HAR 时选择 **Export HAR (sanitized)**。详情见 [Chrome DevTools HAR 导出说明](https://developer.chrome.com/docs/devtools/network/reference#save-as-har)。
 2. 在工作台选择“导入文件”，选择 HAR，并填写自己的 DVWA 地址作为页面范围。若 DVWA 安装在子目录，请包含子目录，例如 `http://127.0.0.1:8080/dvwa/`。

@@ -1,11 +1,11 @@
 # 校园设备借用管理系统与安全实验工作台
 
-这个仓库包含校园设备借用管理系统的修复版，以及一个离线页面和报告展示工作台。两个应用均使用 Flask，默认只在本机运行。
+这个仓库包含校园设备借用管理系统的修复版，以及一个页面和报告展示工作台。两个应用均使用 Flask，默认只在本机运行。
 
 | 目录 | 内容 |
 | --- | --- |
 | [`campus/`](campus/) | 登录、设备目录、借用申请、审批、留言、资料与附件管理 |
-| [`workbench/`](workbench/) | HAR 和报告导入、页面清单、链接关系、工具筛选与结果导出 |
+| [`workbench/`](workbench/) | 本机 DVWA 页面采集、HAR 和报告导入、页面清单、链接关系、筛选与导出 |
 | [`workbench/verification/`](workbench/verification/) | 使用临时 SQLite 数据库的业务和安全回归 |
 
 ## 安装依赖
@@ -23,6 +23,10 @@ python .\workbench\app.py
 ```
 
 在浏览器访问 [安全实验工作台](http://127.0.0.1:5080/)。首页会显示虚构的演示记录。导入自己的 HAR 时填写实际的地址范围，导入已有报告时选择对应的目标。更多字段说明见 [工作台使用说明](workbench/README.md)。
+
+## 在线采集本机 DVWA
+
+本机 DVWA 登录页打开后，另开一个 PowerShell 窗口，在仓库根目录运行 `python .\workbench\crawl_dvwa.py`。在终端输入 DVWA 账号和密码，完成后把脚本提示的 JSON 文件导入工作台。详细步骤见 [在线采集说明](workbench/README.md#在线采集本机-dvwa)。
 
 ## 启动校园系统修复版
 
