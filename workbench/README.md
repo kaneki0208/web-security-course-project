@@ -55,14 +55,18 @@ HAR 在本机解析。范围按协议、主机、端口和路径匹配。输出�
 ## 检测报告
 
 - **OWASP ZAP** 可导入已有的 [Traditional JSON 报告](https://www.zaproxy.org/docs/desktop/addons/report-generation/report-traditional-json/)。告警按实例存入视图，初始状态为“待复核”。详情保留规则、URL、方法、参数及证据位置，原始证据在原报告中查阅。导入时选填目标，覆盖对照中会登记该工具已有报告。这个状态仅说明报告已提供。
-- **Nikto、sqlmap、长亭 xray** 当前通过 `course-evidence/v1` JSON 整理已有结果。以下是单条记录的结构，示例所用地址和证据均为虚构。`tool` 也接受 `OWASP ZAP` 和 `静态代码审查`。`review` 支持 `待复核`、`已确认`、`误报` 和 `漏报`，省略时默认为 `待复核`。
+- **sqlmap、长亭 xray** 当前通过 `course-evidence/v1` JSON 整理已有结果。`tool` 也接受 `OWASP ZAP` 和 `静态代码审查`。`review` 支持 `待复核`、`已确认`、`误报` 和 `漏报`，省略时默认为 `待复核`。
+
+两套目标的 ZAP 实验均使用安全模式，记录正常登录和页面浏览产生的流量。[ZAP 被动结果摘要](evidence/zap-passive-summary.json)按目标和规则合并，可直接导入。摘要中的复核结论针对标明的代表性响应。
+
+下面展示一条虚构的课程 JSON 记录。
 
 ```json
 {
   "schema": "course-evidence/v1",
   "findings": [
     {
-      "tool": "Nikto",
+      "tool": "OWASP ZAP",
       "target": "校园设备借用管理系统",
       "type": "响应头配置",
       "title": "配置检查记录",
@@ -82,7 +86,7 @@ HAR 在本机解析。范围按协议、主机、端口和路径匹配。输出�
 
 ### 工具覆盖对照
 
-扫描报告页列出 4 个工具与 2 个目标的 8 格对照。仅有报告时登记“已有报告”，可通过 `coverage` 另行导入核对结果。`target` 接受 `DVWA` 或 `校园设备借用管理系统`。`state` 接受 `已有报告`、`已核对覆盖范围`、`未覆盖`，后两项需要填写 `scope` 和 `reference`。没有覆盖记录的格子显示“待补证据”。以下记录仅说明字段结构。
+扫描报告页列出 3 个工具与 2 个目标的 6 格对照。仅有报告时登记“已有报告”，可通过 `coverage` 另行导入核对结果。`target` 接受 `DVWA` 或 `校园设备借用管理系统`。`state` 接受 `已有报告`、`已核对覆盖范围`、`未覆盖`，后两项需要填写 `scope` 和 `reference`。没有覆盖记录的格子显示“待补证据”。以下记录仅说明字段结构。
 
 ```json
 {
@@ -90,7 +94,7 @@ HAR 在本机解析。范围按协议、主机、端口和路径匹配。输出�
   "coverage": [
     {
       "target": "DVWA",
-      "tool": "Nikto",
+      "tool": "OWASP ZAP",
       "state": "已核对覆盖范围",
       "scope": "从已保存的记录填写实际覆盖范围",
       "reference": "填写对应记录文件与条目"
@@ -106,11 +110,11 @@ HAR 在本机解析。范围按协议、主机、端口和路径匹配。输出�
 - 业务后端为 Python Flask，页面用 Jinja，交互为原生 JavaScript，存储为 SQLite。已实现登录、学生和管理员角色、设备搜索、借用申请与审批、留言、附件及资料修改。
 - `app.py` 第 180–198 行定义需登入的 `GET /equipment`。第 183 行读取 `q`，第 192 行在漏洞分支将其拼入 SQL，第 189 行的修复分支使用 `LIKE ?`。`category` 在查询返回后由 Python 筛选。其余四项源码中的漏洞模式差异为存储型 XSS、对象级访问控制缺失、可同源打开的 HTML 附件和 CSRF。
 - 有 `Dockerfile`、`compose.yaml`、`.dockerignore` 和 `deploy/nginx-course.conf`。本地启动脚本使用 5000 和 5001，Compose 也将这两个主机端口绑定到回环地址。Nginx 文件是默认拒绝访问的草案，压缩包无法证明跨组隔离部署已经完成。
-- 包内的 `verify_http.py` 和 `verify_browser.py` 是定向验证脚本。四个指定工具的实际报告、工具集成模块和 DVWA 页面记录均未随包提供。
+- 包内的 `verify_http.py` 和 `verify_browser.py` 是定向验证脚本。工具报告、工具集成模块和 DVWA 页面记录均未随原始源码包提供。
 
 ## 后续开发顺序
 
 1. 收集 DVWA 和校园系统已有的 HAR 与检测报告，在材料清单中补齐目标、版本、时间、页面覆盖范围及证据文件名。保留校园系统漏洞模式和修复模式的来源标签。
 2. 按源码与人工复核证据建立基线，给每条报告告警记录真伪、依据和范围。针对 DVWA 的普通 SQL Injection 和 Blind 页面，分别记录页面、字段、状态及证据来源。
-3. 取得 Nikto、sqlmap、长亭 xray 的实际导出样本后逐个增加离线适配器，使用脱敏样本测试字段映射。用覆盖对照维护证据，并导出 `course-evidence.json` 供合稿复核。
+3. 取得 sqlmap 和长亭 xray 的实际导出样本后逐个增加离线适配器，使用脱敏样本测试字段映射。用覆盖对照维护证据，并导出 `course-evidence.json` 供合稿复核。
 4. 课程的跨组验收单独确认隔离环境、授权范围、访问限制和测试数据恢复。保留验收记录作为部署证据。

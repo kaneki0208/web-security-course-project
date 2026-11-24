@@ -20,4 +20,5 @@ uploads/
 Thumbs.db
 /workbench/evidence/*
 !/workbench/evidence/source-audit.json
+!/workbench/evidence/zap-passive-summary.json
 /records/

@@ -1,0 +1,210 @@
+{
+  "schema": "course-evidence/v1",
+  "provenance": {
+    "tool": "OWASP ZAP",
+    "version": "2.17.0",
+    "mode": "被动扫描",
+    "reports": [
+      {
+        "target": "校园设备借用管理系统",
+        "variant": "修复版",
+        "date": "2026-11-23",
+        "rules": 5,
+        "instances": 16
+      },
+      {
+        "target": "DVWA",
+        "variant": "本地靶场",
+        "date": "2026-11-24",
+        "rules": 9,
+        "instances": 27
+      }
+    ]
+  },
+  "findings": [
+    {
+      "tool": "OWASP ZAP",
+      "target": "校园设备借用管理系统",
+      "type": "响应头配置",
+      "title": "内容安全策略缺少表单提交限制",
+      "url": "http://127.0.0.1:5001/login",
+      "method": "GET",
+      "severity": "中",
+      "review": "已确认",
+      "reference": "ZAP 规则 10055-13",
+      "evidence": "原报告记录 5 个实例。复核登录页响应头。CSP 已设置，缺少 form-action。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "校园设备借用管理系统",
+      "type": "版本信息",
+      "title": "响应头公开服务器组件版本号",
+      "url": "http://127.0.0.1:5001/login",
+      "method": "GET",
+      "severity": "低",
+      "review": "已确认",
+      "reference": "ZAP 规则 10036-2",
+      "evidence": "原报告记录 5 个实例。复核登录页的 Server 响应头，确认返回了框架和运行时的版本号。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "校园设备借用管理系统",
+      "type": "输入回显",
+      "title": "设备搜索值回显于输入框",
+      "url": "http://127.0.0.1:5001/equipment",
+      "method": "GET",
+      "severity": "信息",
+      "review": "已确认",
+      "reference": "ZAP 规则 10031",
+      "evidence": "原报告记录 1 个实例。复核确认搜索值出现在输入框的 HTML 属性中，修复版模板对该值进行转义。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "校园设备借用管理系统",
+      "type": "会话识别",
+      "title": "检测到会话管理响应",
+      "url": "http://127.0.0.1:5001/login",
+      "method": "POST",
+      "severity": "信息",
+      "review": "已确认",
+      "reference": "ZAP 规则 10112",
+      "evidence": "原报告记录 4 个实例。登录响应可见会话 Cookie 的设置记录。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "校园设备借用管理系统",
+      "type": "登录识别",
+      "title": "检测到登录请求",
+      "url": "http://127.0.0.1:5001/login",
+      "method": "POST",
+      "severity": "信息",
+      "review": "已确认",
+      "reference": "ZAP 规则 10111",
+      "evidence": "原报告记录 1 个实例。ZAP 记录了正常登录的表单提交。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "版本信息",
+      "title": "Nginx 版本匹配风险提示",
+      "url": "http://127.0.0.1:8085/dvwa/css/login.css",
+      "method": "GET",
+      "severity": "高",
+      "review": "待复核",
+      "reference": "ZAP 规则 20020-5",
+      "evidence": "原报告记录 1 个实例。提示来自响应中的版本字符串。需核对实际构建和补丁状态。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "响应头配置",
+      "title": "登录页未返回 CSP 响应头",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "GET",
+      "severity": "中",
+      "review": "已确认",
+      "reference": "ZAP 规则 10038-1",
+      "evidence": "原报告记录 4 个实例。手工访问登录页返回 HTTP 200，响应未包含 Content-Security-Policy。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "响应头配置",
+      "title": "登录页未返回防嵌入响应头",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "GET",
+      "severity": "中",
+      "review": "已确认",
+      "reference": "ZAP 规则 10020-1",
+      "evidence": "原报告记录 4 个实例。手工复核登录页响应，未见 X-Frame-Options 或 CSP 响应头。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "Cookie 配置",
+      "title": "Cookie 的 SameSite 属性缺失提示",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "GET",
+      "severity": "低",
+      "review": "待复核",
+      "reference": "ZAP 规则 10054-1",
+      "evidence": "原报告记录 1 个实例。原报告记录了一项 Cookie 配置提示。需核对该次响应的属性。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "版本信息",
+      "title": "登录页响应头公开 Nginx 版本号",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "GET",
+      "severity": "低",
+      "review": "已确认",
+      "reference": "ZAP 规则 10036-2",
+      "evidence": "原报告记录 5 个实例。手工复核登录页响应的 Server 字段，确认可以看到版本号。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "响应头配置",
+      "title": "登录页未返回 X-Content-Type-Options",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "GET",
+      "severity": "低",
+      "review": "已确认",
+      "reference": "ZAP 规则 10021",
+      "evidence": "原报告记录 5 个实例。手工访问登录页返回 HTTP 200，响应未包含 X-Content-Type-Options。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "会话识别",
+      "title": "检测到会话管理响应",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "POST",
+      "severity": "信息",
+      "review": "待复核",
+      "reference": "ZAP 规则 10112",
+      "evidence": "原报告记录 3 个实例。ZAP 识别到与会话管理相关的响应。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "应用识别",
+      "title": "识别到 Web 应用特征",
+      "url": "http://127.0.0.1:8085/index.php",
+      "method": "GET",
+      "severity": "信息",
+      "review": "待复核",
+      "reference": "ZAP 规则 10109",
+      "evidence": "原报告记录 3 个实例。原报告记录了页面检测特征。"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "type": "登录识别",
+      "title": "检测到登录请求",
+      "url": "http://127.0.0.1:8085/login.php",
+      "method": "POST",
+      "severity": "信息",
+      "review": "待复核",
+      "reference": "ZAP 规则 10111",
+      "evidence": "原报告记录 1 个实例。ZAP 记录了登录表单提交。"
+    }
+  ],
+  "coverage": [
+    {
+      "tool": "OWASP ZAP",
+      "target": "校园设备借用管理系统",
+      "state": "已有报告",
+      "scope": "修复版 http://127.0.0.1:5001",
+      "reference": "ZAP 2.17.0 被动报告脱敏摘要"
+    },
+    {
+      "tool": "OWASP ZAP",
+      "target": "DVWA",
+      "state": "已有报告",
+      "scope": "本地靶场 http://127.0.0.1:8085",
+      "reference": "ZAP 2.17.0 被动报告脱敏摘要"
+    }
+  ]
+}

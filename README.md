@@ -24,6 +24,17 @@ python .\workbench\app.py
 
 在浏览器访问 [安全实验工作台](http://127.0.0.1:5080/)。首页会显示虚构的演示记录。导入自己的 HAR 时填写实际的地址范围，导入已有报告时选择对应的目标。更多字段说明见 [工作台使用说明](workbench/README.md)。
 
+## ZAP 被动扫描结果
+
+校园系统修复版和本地 DVWA 的 ZAP 被动结果已整理成[脱敏摘要](workbench/evidence/zap-passive-summary.json)。在工作台点 **导入文件** 选择该 JSON，即可按目标和复核状态查看。
+
+| 目标 | 触发规则 | 原报告告警实例 |
+| --- | ---: | ---: |
+| 校园系统修复版 | 5 | 16 |
+| 本地 DVWA | 9 | 27 |
+
+摘要按目标和规则合并，记录代表性页面和复核依据。继续核对时以原报告及本地实验记录为准。
+
 ## 在线采集本机 DVWA
 
 本机 DVWA 登录页打开后，另开一个 PowerShell 窗口，在仓库根目录运行 `python .\workbench\crawl_dvwa.py`。在终端输入 DVWA 账号和密码，完成后把脚本提示的 JSON 文件导入工作台。详细步骤见 [在线采集说明](workbench/README.md#在线采集本机-dvwa)。
@@ -47,4 +58,4 @@ python -B .\workbench\verification\check_campus_fixed.py
 python -B .\workbench\verification\check_campus_fixed_controls.py
 ```
 
-仓库中的 `workbench/evidence/source-audit.json` 记录课程原始源码的静态审查，行号沿用原始版本。公开演示数据在 `workbench/examples/`。实际抓包、实验报告、数据库和用户附件应留在各自的本机工作区中。
+仓库中的 `workbench/evidence/source-audit.json` 记录课程原始源码的静态审查，行号沿用原始版本。公开演示数据在 `workbench/examples/`。原始抓包、完整工具报告、数据库和用户附件保存在本机工作区。

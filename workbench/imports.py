@@ -7,7 +7,7 @@ import posixpath
 from urllib.parse import parse_qsl, quote, unquote, urljoin, urlsplit
 
 
-SCAN_TOOLS = ('OWASP ZAP', 'Nikto', 'sqlmap', '长亭 xray')
+SCAN_TOOLS = ('OWASP ZAP', 'sqlmap', '长亭 xray')
 TOOLS = (*SCAN_TOOLS, '静态代码审查')
 TARGETS = ('DVWA', '校园设备借用管理系统')
 COVERAGE_STATES = ('已有报告', '已核对覆盖范围', '未覆盖')

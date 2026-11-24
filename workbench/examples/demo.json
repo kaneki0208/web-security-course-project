@@ -35,19 +35,14 @@
       "reference": "演示记录 A", "evidence": "示例响应未记录 Content-Security-Policy。请对照原始响应头复核。"
     },
     {
-      "tool": "Nikto", "type": "响应头配置", "title": "响应头配置提示",
-      "url": "https://lab.example.test/profile", "method": "GET", "severity": "信息", "review": "误报",
-      "reference": "演示记录 B", "evidence": "样例复核记录显示对应路径已返回预期响应头。"
-    },
-    {
       "tool": "sqlmap", "type": "SQL 注入", "title": "设备筛选参数",
       "url": "https://lab.example.test/catalog?q", "method": "GET", "parameter": "q", "severity": "高", "review": "漏报",
-      "reference": "演示记录 C", "evidence": "样例基线列出此项，样例工具报告未记录对应条目。"
+      "reference": "演示记录 B", "evidence": "样例基线列出此项，样例工具报告未记录对应条目。"
     },
     {
       "tool": "长亭 xray", "type": "访问控制", "title": "借用记录的权限检查",
       "url": "https://lab.example.test/requests", "method": "GET", "severity": "中", "review": "已确认",
-      "reference": "演示记录 D", "evidence": "样例人工复核使用两组权限记录进行对照。"
+      "reference": "演示记录 C", "evidence": "样例人工复核使用两组权限记录进行对照。"
     }
   ]
 }

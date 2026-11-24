@@ -89,7 +89,7 @@ class ImportTests(unittest.TestCase):
         self.assertNotIn('secret', str(result))
 
     def test_course_report_preserves_review_and_validates_tools(self):
-        row = {'tool': 'Nikto', 'title': '配置检查', 'type': '响应头', 'review': '误报',
+        row = {'tool': 'OWASP ZAP', 'title': '配置检查', 'type': '响应头', 'review': '误报',
                'url': 'http://LOCALHOST:80/lab?q=secret#private', 'evidence': '复核摘要'}
         raw = {'schema': 'course-evidence/v1', 'findings': [row]}
         result, = read_document(raw)['findings']
@@ -132,8 +132,8 @@ class RouteTests(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
         data = self.client.get('/api/example').get_json()
         self.assertEqual(len(data['pages']), 4)
-        self.assertEqual(len(data['findings']), 4)
-        self.assertEqual(page.text.count('待补证据'), 8)
+        self.assertEqual(len(data['findings']), 3)
+        self.assertEqual(page.text.count('待补证据'), 6)
 
     def test_source_audit_has_five_findings_and_no_scanner_coverage(self):
         data = self.client.get('/api/source-audit').get_json()
